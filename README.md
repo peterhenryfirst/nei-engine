@@ -1,21 +1,21 @@
 
-# NILA EUPHORBIA IBIS ENGINE
+# NEI (Nila Euphorbia Ibis) ENGINE
 
-todo
+It is a basic game engine to use and experiment with different mechanics with canvas and webgl.
 
-descriptive tagline
-
-The name is obtained from the wikipedia home with random article:
+The name goes from the wikipedia home with random article:
 
   - NILA: http://en.wikipedia.org/wiki/Nila_%28Ramayana%29
   - AUPHORBIA: http://en.wikipedia.org/wiki/Euphorbia
   - IBIS: http://en.wikipedia.org/wiki/Ibis
 
-NILA: 
+I selected that name because i did not find an approximate name to a game engine.
 
 ## OVERVIEW
 
-todo
+NEI is a structured game engine, with a basic and easy format to create a 'game'.
+
+To create a new game you have entities that are a desired logic element, that is represented by his components. And each entity can send messages to interact with other entities/components.
 
 ## EXAMPLE USAGE
 
