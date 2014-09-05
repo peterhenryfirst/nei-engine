@@ -9,6 +9,7 @@
   },
   "main": "./nei",
   "dependencies": {
+    "javascript-state-machine": "2.3.2"
   },
   "devDependencies": {
     "browserify": "~3.24.13",
