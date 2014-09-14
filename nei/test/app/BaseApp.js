@@ -1,3 +1,4 @@
+/*jslint maxlen: 500 */
 var chai = require('chai');
 var expect = chai.expect;
 var should = chai.should();
@@ -14,11 +15,9 @@ describe('Base App tests', function() {
 	});
 	
 	afterEach(function(done) {
-		
 		if (base.isInitiated()) {
 			base.release();
 		}
-		
 		done();
 	});
 	
@@ -30,11 +29,8 @@ describe('Base App tests', function() {
 		expect(base).to.have.property('release').and.to.be.a('function');
 		
 		expect(base).to.have.property('isInitiated').and.to.be.a('function');
+		expect(base).to.have.property('setOptions').and.to.be.a('function');
 
-	});
-	
-	it('should get false from isInitiated method before any call', function() {
-		expect(base.isInitiated()).to.be.false;
 	});
 	
 	it('should throw error when try to initialize twice', function() {
@@ -77,6 +73,59 @@ describe('Base App tests', function() {
 		
 		spy.should.have.thrown();
 		
+		spy.restore();
+	});
+	
+	it('should get false from isInitiated method before any call', function() {
+		expect(base.isInitiated()).to.be.false;
+	});
+	
+	it('should get true from isInitiated method after call init', function() {
+		var spy = sinon.spy(base, 'init');
+		
+		base.init();
+		
+		expect(spy).to.have.been.calledOnce;
+		
+		spy.restore();
+		
+		expect(base.isInitiated()).to.be.true;
+	});
+	
+	it('should get false from isInitiated method after call init and release', function() {
+		
+		var spyRelease = sinon.spy(base, 'release'),
+			spyInit = sinon.spy(base, 'init');
+		
+		base.init();
+		
+		base.release();
+		
+		expect(spyRelease).to.have.been.called;
+		expect(spyInit).to.have.been.called;
+		
+		spyRelease.restore();
+		spyInit.restore();
+		
+		expect(base.isInitiated()).to.be.false;
+		
+	});
+	
+	it('should throw error when try to call setOptions before init', function() {
+		
+		var spy = sinon.spy(base, 'setOptions');
+		
+		try {
+			base.setOptions();
+		} catch (e) {
+		}
+		
+		expect(spy).to.have.been.called;
+		
+		spy.should.have.thrown();
+		
+		spy.restore();
+		
 	});
 	
 	it('should exist functions run and tick', function() {
@@ -94,5 +143,37 @@ describe('Base App tests', function() {
 		expect(base).to.have.property('setState').and.to.be.a('function');
 		expect(base).to.have.property('changeState').and.to.be.a('function');
 		
+	});
+	
+	it('should throw error when try to call setState before init', function() {
+		
+		var spy = sinon.spy(base, 'setState');
+		
+		try {
+			base.setState();
+		} catch (e) {
+		}
+		
+		expect(spy).to.have.been.called;
+		
+		spy.should.have.thrown();
+		
+		spy.restore();
+	});
+	
+	it('should throw error when try to call changeState before init',function() {
+		
+		var spy = sinon.spy(base, 'changeState');
+		
+		try {
+			base.changeState();
+		} catch (e) {
+		}
+		
+		expect(spy).to.have.been.called;
+		
+		spy.should.have.thrown();
+		
+		spy.restore();
 	});
 });

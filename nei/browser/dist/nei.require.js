@@ -6,27 +6,38 @@ var baseApp = ( function (baseSubModule) {
 	
 	//private properties
 	
-	var _initialized = false;
+	//this._initialized = false;
+	
+	function checkIsInit() {
+		
+		if (!this._initialized) {
+			throw new Error('The application was not initilized previously');
+		}
+	}
 	
 	function init() {
 		
-		if (_initialized) {
+		if (this._initialized) {
 			throw new Error('The application was initilized previously');
 		}
-		_initialized = true;
+		this._initialized = true;
 	}
 	
 	function release() {
-		console.log('RELEASE: ' + _initialized);
-		if (!_initialized) {
-			console.log('RELEASE2');
-			throw new Error('The application was not initilized previously');
-		}
-		_initialized = false;
+		
+		this.checkIsInit();
+		
+		this._initialized = false;
 	}
 	
 	function isInitiated() {
-		return _initialized;
+		return this._initialized;
+	}
+	
+	function setOptions() {
+		this.checkIsInit();
+		
+		return this;
 	}
 	
 	function run() {
@@ -36,17 +47,23 @@ var baseApp = ( function (baseSubModule) {
 	}
 	
 	function setState() {
+		this.checkIsInit();
 	}
 	
 	function changeState() {
+		this.checkIsInit();
 	}
 	
 	//public properties
 	baseSubModule = {
 		
+		checkIsInit: checkIsInit,
+		_initialized: false,
+		
 		init: init,
 		release: release,
 		isInitiated: isInitiated,
+		setOptions: setOptions,
 		
 		run: run,
 		tick: tick,
