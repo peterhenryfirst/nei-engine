@@ -6,3 +6,4 @@ npm
 npm.cmd
 node_modules/
 web/npm-debug.log
+npm-debug.log

@@ -3,9 +3,11 @@ var baseApp = ( function (baseSubModule) {
 	
 	//dependencies
 	
+	var StateMachine = require('javascript-state-machine');
+	
 	//private properties
 	
-	//this._initialized = false;
+	var defaultOptions = {};
 	
 	function checkIsInit() {
 		
@@ -19,7 +21,11 @@ var baseApp = ( function (baseSubModule) {
 		if (this._initialized) {
 			throw new Error('The application was initilized previously');
 		}
+		
+		this.fsm = StateMachine.create(this.options ? this.options.fsm : {});
+		
 		this._initialized = true;
+		this._oldState = '';
 	}
 	
 	function release() {
@@ -33,8 +39,9 @@ var baseApp = ( function (baseSubModule) {
 		return this._initialized;
 	}
 	
-	function setOptions() {
-		this.checkIsInit();
+	function setOptions(opt) {
+		//this.checkIsInit();
+		this.options = opt || defaultOptions;
 		
 		return this;
 	}
@@ -43,14 +50,26 @@ var baseApp = ( function (baseSubModule) {
 	}
 	
 	function tick() {
+		if (this._states[this.fsm.current]) {
+			this._states[this.fsm.current].tick();
+		}
 	}
 	
-	function setState() {
+	function trigger(newEventName) {
 		this.checkIsInit();
+		
+		if (this.fsm.can(newEventName)) {
+			this._oldState = this.fsm.current;
+			this.fsm[newEventName]();
+		}
 	}
 	
 	function changeState() {
 		this.checkIsInit();
+		
+		this._states[this._oldState].deactivate();
+		
+		this._states[this.fsm.current].activate();
 	}
 	
 	//public properties
@@ -58,6 +77,8 @@ var baseApp = ( function (baseSubModule) {
 		
 		checkIsInit: checkIsInit,
 		_initialized: false,
+		_oldState: '',
+		_states: {},
 		
 		init: init,
 		release: release,
@@ -67,7 +88,9 @@ var baseApp = ( function (baseSubModule) {
 		run: run,
 		tick: tick,
 		
-		setState: setState,
+		StateMachine: StateMachine,
+		
+		trigger: trigger,
 		changeState: changeState
 	};
 	
